@@ -1,6 +1,5 @@
 port=os.environ["PORT"]
 
-
 import requests
 import os
 
@@ -30,9 +29,5 @@ if r.status_code == 200:
    
     for dic in datos['data']['results'][0]['series']['items']:
         print(dic['name']
-
-
-
-
 
 app.run('0.0.0.0',int(port), debug=True)
