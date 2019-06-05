@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block autores %}
+
+<section id="main">
+  <div class="container">
+    <div class="row">
+
+      <!-- Content -->
+        <div id="content" class="col-8 col-12-medium">
+
+          <!-- Post -->
+            <article class="box post">
+              <header>
+                <h2>Conoce a los que dan vida a tus personajes favoritos<br /></h2>
+              </header>
+              <a href="{{url_for("static", filename='images/stanlee.jpg')}}" class="image featured"><img src="static/images/stanlee.jpg" alt="" /></a>
+              <h3>Autores mas importantes</h3>
+              <p> </p>
+                <form action="/autores" method="post">
+
+                  <input type="hidden" name="4926" >
+                  <button type="submit">Stan Lee</button>
+
+                  <input type="hidden" name="nombrecompleto" >
+                  <button type="submit">Chris Claremont</button>
+
+                  <input type="hidden" name="nombrecompleto" >
+                  <button type="submit">Jim Starlin</button>
+                  <p> </p>
+                  <input type="hidden" name="nombrecompleto" >
+                  <button type="submit">Mark Millar</button>
+
+                  <input type="hidden" name="nombrecompleto" >
+                  <button type="submit">Brian Bendis</button>
+
+                  <input type="hidden" name="nombrecompleto" >
+                  <button type="submit">Frank Miller</button>
+                  <p> </p>  
+                  <input type="hidden" name="nombrecompleto" >
+                  <button type="submit">Matt Fraction</button>
+
+                  <input type="hidden" name="nombrecompleto" >
+                  <button type="submit">Jeff Lemire</button>
+                  
+                  <input type="hidden" name="nombrecompleto" >
+                  <button type="submit">Tom King</button>
+                </form> 
+              <p> </p>
+            </article>
+        </div>
+
+      <!-- Sidebar -->
+        <div id="sidebar" class="col-4 col-12-medium">
+
+          <!-- Excerpts -->
+            <section>
+              <ul class="divided">
+                <li>
+
+                  <!-- Excerpt -->
+                    <article class="box excerpt">
+                      <header>
+                        <h3><a href="#">Haz una busqueda del autor</a></h3>
+                      </header>
+                        <form action="/autores" method="post">
+                          <label>Nombre:</label>
+                          <input type="text" name="nombre" required/>
+                          <h3></h3>
+                          <input type="submit" value="Enviar"/>
+                      </form>
+                    </article>
+
+                </li>
+              </ul>
+            </section>
+
+        </div>
+
+    </div>
+  </div>
+</section>  
+
+{% endblock %}
+
+
+
+

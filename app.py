@@ -20,34 +20,30 @@ def inicio():
 #------------------------------------------------------------------------------------------------------------------------
 
 @app.route('/autores', methods=["GET","POST"])
-def mostrarautores():
+def mostrardatosautores():
 
     if request.method=="GET":
-        autores = mostrarautores()
-        print(autores)
-        return render_template("autores.html",autores=autores)    
+        return render_template("autores.html")    
     else:
         nombre = request.form.get("nombre")
-        datoscomic = datosautores(nombre)
-        print(nombre)
-    
-    return render_template("resultadoautores.html", datoscomic=datoscomic, nombre=nombre)
+        autores = mostrarautores(nombre)
+        
+        return render_template("busquedaautores.html", autores=autores)
 
 #------------------------------------------------------------------------------------------------------------------------
 
-@app.route('/comic/<id>', methods=["GET","POST"])
-def mostrarcomic(id):
+@app.route('/autores/<id>', methods=["GET","POST"])
+def mostrarcomicautores(id):
 
     if request.method=="GET":
-        return render_template("comic.html",id=id)
+        
+        datoscomic = datosautores(id)
+        nombre = nombreautor(id)
+        return render_template("resultadoautores.html", datoscomic=datoscomic, nombre=nombre)
 
 #------------------------------------------------------------------------------------------------------------------------
 
-@app.route('/comic', methods=["GET","POST"])
-def mostrarcomics():
 
-    if request.method=="GET":
-        return render_template("comic.html",id=id)
 
 #------------------------------------------------------------------------------------------------------------------------
 
@@ -62,7 +58,38 @@ def mostrarheroes():
 #------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------
 
-def datosautores(nombre):
+def nombreautor(ids):
+
+    mikey=os.environ["MiKey"]
+    mikeypublica=os.environ["MiKeyPublica"]
+
+    lista = []
+    listadatos = []
+
+    h = hashlib.new("md5",bytes(mikey,"utf-8"))
+    hash1=h.hexdigest()
+    URL_BASE="http://gateway.marvel.com/v1/public/"
+
+    listadatos=[]
+
+    parametros={
+        'id' : ids,
+        'ts':'1',
+        'apikey': mikeypublica,
+        'hash':hash1
+    }
+
+    r=requests.get(URL_BASE+"creators",params=parametros)
+    
+    if r.status_code == 200:
+        
+        datos=r.json()
+        nombre = datos['data']['results'][0]["fullName"]
+    return nombre
+
+#------------------------------------------------------------------------------------------------------------------------
+
+def datosautores(ids):
     
     mikey=os.environ["MiKey"]
     mikeypublica=os.environ["MiKeyPublica"]
@@ -74,42 +101,29 @@ def datosautores(nombre):
     hash1=h.hexdigest()
     URL_BASE="http://gateway.marvel.com/v1/public/"
 
+    listadatos=[]
+
     parametros={
-        'fullName' : nombre,
         'ts':'1',
         'apikey': mikeypublica,
         'hash':hash1
     }
-    r=requests.get(URL_BASE+"creators",params=parametros)
+
+    r=requests.get(URL_BASE+"creators/"+ids+"/comics",params=parametros)
 
     if r.status_code == 200:
         datos=r.json()
-        for dic in datos['data']['results'][0]['series']['items']:
 
+        for dic in datos['data']['results']:
+            url = (dic["thumbnail"]["path"]+"/portrait_xlarge.jpg")
+            lista = [dic["title"], url, dic["id"], dic]
+            listadatos.append(lista)
 
-            URL_BASE = dic.get('resourceURI')
-
-            parametros={
-                'ts':'1',
-                'apikey': mikeypublica,
-                'hash':hash1
-            }
-
-            r=requests.get(URL_BASE,params=parametros)
-
-            if r.status_code == 200:
-                datos1=r.json()
-                imagen=(datos1['data']['results'][0]['thumbnail']['path']+"/portrait_incredible.jpg")
-                nombre=(datos1['data']['results'][0]['title'])
-                ids=(datos1['data']['results'][0]['id'])
-                lista = [imagen,nombre,ids]
-                listadatos.append(lista)
-    print(listadatos)
-    return listadatos
+        return listadatos
 
 #------------------------------------------------------------------------------------------------------------------------
 
-def mostrarautores():
+def mostrarautores(variable):
     
     mikey=os.environ["MiKey"]
     mikeypublica=os.environ["MiKeyPublica"]
@@ -120,22 +134,65 @@ def mostrarautores():
     hash1=h.hexdigest()
     URL_BASE="http://gateway.marvel.com/v1/public/"
 
-    for valor in range(10):
 
+    nombre1=variable
+    
+    
+    if " " in variable:
+        nombre1 = variable.split()[0]
+        nombre2 = variable.split()[1]
+        
         parametros={
-            'offset' : valor * 20,
+            'lastName' : nombre2,
             'ts':'1',
             'apikey': mikeypublica,
             'hash':hash1
         }
         r=requests.get(URL_BASE+"creators",params=parametros)
-
+    
         if r.status_code == 200:
             datos=r.json()
+    
             for dic in datos['data']['results']:
-                nombre = (dic['fullName'])
-                listautores.append(nombre)
-
+            
+                lista = [dic["fullName"],dic["id"]]
+                listautores.append(lista)
+    
+    #-------------------
+    
+    parametros={
+        'firstName' : nombre1,
+        'ts':'1',
+        'apikey': mikeypublica,
+        'hash':hash1
+    }
+    r=requests.get(URL_BASE+"creators",params=parametros)
+    
+    if r.status_code == 200:
+        datos=r.json()
+    
+        for dic in datos['data']['results']:
+            
+            lista = [dic["fullName"],dic["id"]]
+            listautores.append(lista)
+    
+    #-------------------
+    
+    parametros={
+        'lastName' : nombre1,
+        'ts':'1',
+        'apikey': mikeypublica,
+        'hash':hash1
+    }
+    r=requests.get(URL_BASE+"creators",params=parametros)
+    
+    if r.status_code == 200:
+        datos=r.json()
+    
+        for dic in datos['data']['results']:
+            lista = [dic["fullName"],dic["id"]]
+            listautores.append(lista)
+    
     return listautores
 
 #------------------------------------------------------------------------------------------------------------------------

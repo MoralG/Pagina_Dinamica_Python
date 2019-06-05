@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{nombre}}{{apellido}}{% endblock %}
+{% block resultadoautores %}
+
+<section id="features">
+        <div class="container">
+                <header>
+                        <h2>Comic mas importantes de <strong>{{ nombre }}</strong>!</h2>
+                </header>
+                <div class="row aln-center">
+                        {% for dato in datoscomic %}
+                                <div class="col-4 col-6-medium col-12-small">
+
+                                <!-- Feature -->
+                                
+                                        <section>
+                                                <a href="comic/{{ dato[2] }}" ><img src="{{ dato[1] }}" alt="{{ dato[0] }}" /></a> 
+                                                <header>
+                                                        <h3>{{ dato[0] }}</h3>
+                                                </header>
+                                        </section>
+                                
+
+                                </div>
+                        {% endfor %}
+                </div>
+        </div>
+</section>
+
+        
+{% endblock %}
