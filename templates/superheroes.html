@@ -12,11 +12,11 @@
                 <!-- Post -->
                   <article class="box post">
                     <header>
-                        <h2>Conoce a los que dan vida a tus personajes favoritos<br /></h2>
+                        <h2>Personajes favoritos<br /></h2>
                         <div>
 
-                            {% for dato in imagenes %}   
-                                <img src="{{ dato }}" alt="{{ dato }}" width="120" height="150" /></img>                                    
+                            {% for dato in datos %}   
+                                <img alt="{{ dato[2] }}"/></img>                                    
                             {% endfor %}
                         </div>
                   </article>

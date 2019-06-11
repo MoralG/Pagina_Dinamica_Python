@@ -43,24 +43,12 @@ def mostrarcomicautores(id):
 
 #------------------------------------------------------------------------------------------------------------------------
 
-# @app.route('/comic', methods=["GET","POST"])
-# def mostrarcomic():
-
-#     if request.method=="GET":
-
-#         return render_template("comic.html")    
-#     else:
-        
-#         return render_template("busquedaautores.html", autores=autores)
-
-#------------------------------------------------------------------------------------------------------------------------
-
 @app.route('/superheroes', methods=["GET","POST"])
 def mostrarheroes():
 
     if request.method=="GET":
-        imagenes = imagenesheroes()
-        return render_template("superheroes.html", imagenes=imagenes)    
+        datos = mostrardatosheroes()
+        return render_template("superheroes.html", datos=datos)    
         
 #------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------
@@ -205,20 +193,37 @@ def mostrarautores(variable):
 
 #------------------------------------------------------------------------------------------------------------------------
 
-def imagenesheroes():
+def mostrardatosheroes():
 
-    listaimagen=[]
+    mikey=os.environ["MiKey"]
+    mikeypublica=os.environ["MiKeyPublica"]
 
-    for ids in range(1,10):
+    h = hashlib.new("md5",bytes(mikey,"utf-8"))
+    hash1=h.hexdigest()
+    URL_BASE="http://gateway.marvel.com/v1/public/"
 
-        URL_BASE=("https://superheroapi.com/api/2434277406632758/%d/image" % ids)
+    listadatos=[]
 
+    for i in range(5):
+        parametros={
+            'offset' : i * 20,
+            'ts':'1',
+            'apikey': mikeypublica,
+            'hash':hash1
+        }
+        r=requests.get(URL_BASE+"characters",params=parametros)
 
-        peticion=requests.get(URL_BASE)
-        datos=peticion.json()
-        listaimagen.append(datos["url"])
+        if r.status_code == 200:
 
-    return(listaimagen)
+            datos=r.json()
+            for dato in datos['data']['results']:
+                if "not" not in dato['thumbnail']['path']:
+                    path=(dato['thumbnail']['path'])
+                    imagen=(path+"/portrait_medium.jpg")
+                    lista = [dato['id'], dato['name'], imagen]
+                    listadatos.append(lista)
+
+    return(listadatos)
 
 #------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------
