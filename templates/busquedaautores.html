@@ -16,11 +16,12 @@
               <a href="{{url_for("static", filename='images/stanlee.jpg')}}" class="image featured"><img src="static/images/stanlee.jpg" alt="" /></a>
               <h3>Autores encontrados</h3>
               <p> </p>
-              <form action="/autores" method="post">
+
                 {% for dato in autores %}
-                    <a href="/autores/{{ dato[1] }}" > {{ dato[0] }}  <strong>  |  </strong> </a>
+                    <a href="/autores/{{ dato[1] }}" class="button" >{{ dato[0] }}  </a>
+                    <p> </p>
                 {% endfor %}
-              </form> 
+
             <p> </p>
             </article>
         </div>
