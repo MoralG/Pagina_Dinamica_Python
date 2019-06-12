@@ -1,56 +1,76 @@
 {% extends "base.html" %}
 {% block mostrarheroes %}
 
-<section id="main">
-  <div class="container">
-    <div class="row">
 
-      <!-- Content -->
 
-            <div id="content" class="col-8 col-12-medium">
 
+      <section id="main">
+        <div class="container">
+          <div class="row">
+      
+            <!-- Content -->
+              <div id="content" class="col-8 col-12-medium">
+      
                 <!-- Post -->
                   <article class="box post">
                     <header>
-                        <h2>Personajes favoritos<br /></h2>
-                        <div>
-
-                            {% for dato in datos %}   
-                                <img alt="{{ dato[2] }}"/></img>                                    
-                            {% endfor %}
-                        </div>
+                      <h2>Conoce a tus personajes favoritos<br /></h2>
+                    </header>
+                    <a href="{{url_for("static", filename='images/heroes.jpg')}}" class="image featured"><img src="static/images/heroes.jpg" alt="" /></a>
+                    <h3>Superheroes mas importantes</h3>
                   </article>
               </div>
-
-      <!-- Sidebar -->
-        <div id="sidebar" class="col-4 col-12-medium">
-
-          <!-- Excerpts -->
-            <section>
-              <ul class="divided">
-                <li>
-
-                  <!-- Excerpt -->
-                    <article class="box excerpt">
-                      <header>
-                        <h3><a href="#">Haz una busqueda del SuperHeroe</a></h3>
-                      </header>
-                        <form action="/autores" method="post">
-                          <label>SuperHeroe:</label>
-                          <input type="text" name="nombre" required/>
-                          <h3></h3>
-                          <input type="submit" value="Enviar"/>
-                      </form>
-                    </article>
-
-                </li>
-              </ul>
-            </section>
-
+      
+            <!-- Sidebar -->
+              <div id="sidebar" class="col-4 col-12-medium">
+      
+                <!-- Excerpts -->
+                  <section>
+                    <ul class="divided">
+                      <li>
+      
+                        <!-- Excerpt -->
+                          <article class="box excerpt">
+                            <header>
+                              <h3><a href="#">Haz una busqueda del Superheroes</a></h3>
+                            </header>
+                              <form action="/superheroes" method="post">
+                                <label>Nombre:</label>
+                                <input type="text" name="nombre" required/>
+                                <h3></h3>
+                                <input type="submit" value="Enviar"/>
+                            </form>
+                          </article>
+      
+                      </li>
+                    </ul>
+                  </section>
+      
+              </div>
+      
+          </div>
         </div>
-
-    </div>
-  </div>
-</section>  
+      </section>  
+      
+      
+      
+          <div class="row aln-center">
+              {% for dato in datos %}
+                <div class="col-4 col-6-medium col-12-small">
+                
+                  <!-- Feature -->
+                  <section>
+                    <a href="superheroes/{{ dato[0] }}" ><img src="{{ dato[2] }}" alt="{{ dato[1] }}" /></a> 
+                    <header>
+                            <h3>{{ dato[1] }}</h3>
+                    </header>
+                  </section>
+             
+                </div>
+              {% endfor %}
+          </div>
+      
+      
+    
 
 {% endblock %}

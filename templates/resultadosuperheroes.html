@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{nombre}}{{apellido}}{% endblock %}
+{% block resultadoheroes %}
+
+<section id="main">
+        <div class="container">
+          <div class="row">
+      
+            <!-- Content -->
+              <div id="content" class="col-8 col-12-medium">
+      
+                <!-- Post -->
+                  <article class="box post">
+                    <header>
+                      <h2><strong>{{ nombre }}</strong></h2>
+                    </header>
+                    <a><img src="{{ datosheroes[1] }}" alt="{{ nombre }}" /></a> 
+                    <h4>{{ datosheroes[2] }}</h4>
+                    <h3>{{ datosheroes[0] }}</h3>
+                  </article>
+              </div>
+          </div>
+        </div>
+</section>  
+        
+{% endblock %}

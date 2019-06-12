@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>Strongly Typed by HTML5 UP</title>
+		<title>MundoMarvel</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="{{url_for("static", filename='css/main.css')}}">
@@ -22,7 +22,6 @@
                         <nav id="nav">
                             <ul>
                                 <li><a class="icon fa-home" href="/"><span>Inicio</span></a></li>
-                                <li><a class="fa fa-sticky-note-o" href="/comic"><span>Comic</span></a>
                                 <li><a class="fa fa-paint-brush" href="/autores"><span>Autores</span></a></li>
                                 <li><a class="fa fa-vcard-o" href="/superheroes"><span>Superheroes</span></a></li>
                             </ul>
@@ -33,6 +32,8 @@
                 {% block autores %}{% endblock %}
 				{% block resultadoautores %}{% endblock %}
 				{% block mostrarheroes %}{% endblock %}
+				{% block resultadoheroes %}{% endblock %}
+				
 				
 
 		<!-- Scripts -->

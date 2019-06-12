@@ -32,14 +32,12 @@ def mostrardatosautores():
 
 #------------------------------------------------------------------------------------------------------------------------
 
-@app.route('/autores/<id>', methods=["GET","POST"])
+@app.route('/autores/<id>', methods=["GET"])
 def mostrarcomicautores(id):
 
-    if request.method=="GET":
-        
-        datoscomic = datosautores(id)
-        nombre = nombreautor(id)
-        return render_template("resultadoautores.html", datoscomic=datoscomic, nombre=nombre)
+    datoscomic = datosautores(id)
+    nombre = nombreautor(id)
+    return render_template("resultadoautores.html", datoscomic=datoscomic, nombre=nombre)
 
 #------------------------------------------------------------------------------------------------------------------------
 
@@ -48,7 +46,21 @@ def mostrarheroes():
 
     if request.method=="GET":
         datos = mostrardatosheroes()
-        return render_template("superheroes.html", datos=datos)    
+        return render_template("superheroes.html", datos=datos)
+    else:
+        nombre = request.form.get("nombre")
+        heroes = mostrarnombreheroes(nombre)
+
+        return render_template("busquedasuperheroes.html", heroes=heroes)
+
+#------------------------------------------------------------------------------------------------------------------------
+
+@app.route('/superheroes/<id>', methods=["GET"])
+def mostrarinformacionheroes(id):
+
+    datosheroes = informacionheroes(id)
+    nombre = nombreheroe(id)
+    return render_template("resultadosuperheroes.html", datosheroes=datosheroes, nombre=nombre)
         
 #------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------
@@ -204,7 +216,7 @@ def mostrardatosheroes():
 
     listadatos=[]
 
-    for i in range(5):
+    for i in range(3):
         parametros={
             'offset' : i * 20,
             'ts':'1',
@@ -224,6 +236,95 @@ def mostrardatosheroes():
                     listadatos.append(lista)
 
     return(listadatos)
+
+#------------------------------------------------------------------------------------------------------------------------
+
+def mostrarnombreheroes(nombre):
+
+    mikey=os.environ["MiKey"]
+    mikeypublica=os.environ["MiKeyPublica"]
+
+    h = hashlib.new("md5",bytes(mikey,"utf-8"))
+    hash1=h.hexdigest()
+    URL_BASE="http://gateway.marvel.com/v1/public/"
+
+    listaheroes = []
+
+    variable = nombre.strip()
+
+    parametros={
+        'nameStartsWith' : variable,
+        'ts':'1',
+        'apikey': mikeypublica,
+        'hash':hash1
+    }
+
+    r=requests.get(URL_BASE+"characters",params=parametros)
+
+    if r.status_code == 200:
+        datos=r.json()
+        for dic in datos['data']['results']:
+            lista = [dic["name"],dic["id"]]
+            listaheroes.append(lista)
+    
+    return listaheroes
+
+#------------------------------------------------------------------------------------------------------------------------
+
+def informacionheroes(id):
+
+    mikey=os.environ["MiKey"]
+    mikeypublica=os.environ["MiKeyPublica"]
+
+    h = hashlib.new("md5",bytes(mikey,"utf-8"))
+    hash1=h.hexdigest()
+    URL_BASE="http://gateway.marvel.com/v1/public/"
+
+
+    parametros={
+        'id' : id,
+        'ts':'1',
+        'apikey': mikeypublica,
+        'hash':hash1
+    }
+
+    r=requests.get(URL_BASE+"characters",params=parametros)
+
+    if r.status_code == 200:
+        datos=r.json()
+        for dic in datos['data']['results']:
+            path=(dic['thumbnail']['path'])
+            imagen=(path+"/portrait_incredible.jpg")
+            lista = [dic["description"],imagen,dic["modified"]]
+
+    return lista
+
+#------------------------------------------------------------------------------------------------------------------------
+
+def nombreheroe(id):
+
+    mikey=os.environ["MiKey"]
+    mikeypublica=os.environ["MiKeyPublica"]
+
+    h = hashlib.new("md5",bytes(mikey,"utf-8"))
+    hash1=h.hexdigest()
+    URL_BASE="http://gateway.marvel.com/v1/public/"
+
+    parametros={
+        'id' : id,
+        'ts':'1',
+        'apikey': mikeypublica,
+        'hash':hash1
+    }
+
+    r=requests.get(URL_BASE+"characters",params=parametros)
+
+    if r.status_code == 200:
+        datos=r.json()
+        for dic in datos['data']['results']:
+            nombre = dic["name"]
+    
+    return nombre
 
 #------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------
